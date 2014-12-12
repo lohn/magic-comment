@@ -12,6 +12,8 @@ I originally wrote this to get rid of "invalid multibyte char (US-ASCII)"
 errors when writing strings containing non ascii characters like éöàüèä
 in ruby on rails controllers
 
+the original program was https://github.com/m-ryan/magic_encoding
+
 ## Installation
 
 ```
