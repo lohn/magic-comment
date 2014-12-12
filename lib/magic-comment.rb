@@ -9,7 +9,7 @@ module MagicComment
   def self.process(*paths)
     # defaults
     paths.flatten!
-    paths.push [Dir.pwd] if paths.empty?
+    paths.push Dir.pwd if paths.empty?
 
     encoding = "coding: utf-8"
     default_comment = "# {encoding}\n"
