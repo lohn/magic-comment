@@ -1,66 +1,58 @@
-# -*- encoding : utf-8 -*-
+# coding: utf-8
 
 # A simple library to prepend magic comments for encoding to multiple ".rb" files
 
 module AddMagicComment
 
   # Options :
-  # 1 : Encoding
-  # 2 : Path
-  # TODO : check that the encoding specified is a valid encoding
-  # TODO : allow use of only one option, so the encoding would be guessed (maybe using `file --mime`?)
-  def self.process(options)
+  # - paths
+  def self.process(*paths)
 
     # defaults
-    encoding  = options[0] || "utf-8"
-    directory = options[1] || Dir.pwd
+    paths.push [Dir.pwd] if paths.empty?
 
-    prefix = "coding: #{encoding}\n"
+    encoding = "coding: utf-8\n"
+    default_comment = '# {encoding}'
 
     # TODO : add options for recursivity (and application of the script to a single file)
-
     extensions = {
-      'rb' => '# {text}',
-      'rake' => '# {text}',
-      'haml' => '-# {text}',
+      '.rb' => default_comment,
+      '.rake' => default_comment,
+      '.haml' => '-# {encoding}',
     }
 
-    count = 0
-    extensions.each do |ext, comment_style|
-      rbfiles = File.join(directory ,'**', '*.'+ext)
-      Dir.glob(rbfiles).each do |filename|
-        file = File.new(filename, "r+")
-
-        lines = file.readlines
-
-        # remove current encoding comment(s)
-        while lines[0].match(/^-?# ?(-\*-)? ?(en)?coding/)
-          lines.shift
-        end
-
-        # set current encoding
-        lines.unshift comment_style.sub('{text}', prefix)
-        count += 1
-
-        file.pos = 0
-        file.write lines.join
-        file.close
+    paths.each do |path|
+      path = Pathname.new path
+      if path.file?
+        files.push path
+      elsif path.directory?
+        files += Dir.glob Pathname.join('**', "*#{extensions.keys}")
       end
     end
 
-    puts "Magic comments set for #{count} source files"
+    default_comment.sub! '{encoding}', encoding
+    extensions.each_key do |key|
+      extensions[key].sub! '{encoding}', encoding
+    end
+
+    files.each do |filename|
+      file = File.new(filename, "r+")
+      magic_comment = extensions[ File.extname(file) ] || default_comment
+      lines = file.readlines
+
+      # remove current encoding comment(s)
+      while lines[0].match(/^-?# ?(-\*-)? ?(en)?coding/)
+        lines.shift
+      end
+
+      # set current encoding
+      lines.unshift comment_style.sub('{text}', prefix)
+
+      file.pos = 0
+      file.write lines.join
+      file.close
+    end
+
+    puts "Magic comments set for #{files.length} source files"
   end
-
 end
-
-class String
-
-  def starts_with?(s)
-    self[0..s.length-1] == s
-  end
-
-end
-
-
-
-
