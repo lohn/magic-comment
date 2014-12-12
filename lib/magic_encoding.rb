@@ -1,18 +1,18 @@
 # coding: utf-8
-
 # A simple library to prepend magic comments for encoding to multiple ".rb" files
+require 'pathname'
 
 module AddMagicComment
 
   # Options :
   # - paths
   def self.process(*paths)
-
     # defaults
+    paths.flatten!
     paths.push [Dir.pwd] if paths.empty?
 
     encoding = "coding: utf-8"
-    default_comment = "# {encoding}\n\n"
+    default_comment = "# {encoding}\n"
 
     # TODO : add options for recursivity (and application of the script to a single file)
     extensions = {
@@ -21,12 +21,13 @@ module AddMagicComment
       '.haml' => "-#{default_comment}",
     }
 
+    files = []
     paths.each do |path|
       path = Pathname.new path
       if path.file?
         files.push path
       elsif path.directory?
-        files += Dir.glob Pathname.join('**', "*#{extensions.keys}")
+        files += Dir.glob path.join('**', "*{#{extensions.keys.join ','}}")
       end
     end
 
@@ -46,7 +47,7 @@ module AddMagicComment
       end
 
       # set current encoding
-      lines.unshift comment_style.sub('{text}', prefix)
+      lines.unshift magic_comment
 
       file.pos = 0
       file.write lines.join
