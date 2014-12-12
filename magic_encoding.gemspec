@@ -1,8 +1,6 @@
-# coding: utf-8
-
 Gem::Specification.new do |s|
   s.name = %q{magic_encoding_for_utf8}
-  s.version = "0.0.3"
+  s.version = "0.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.3.6") if s.respond_to? :required_rubygems_version=
   s.authors = ["Lohn IMAI"]
@@ -15,5 +13,4 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{Easily add magic comments for encoding on multiple ruby source files}
-  
 end
