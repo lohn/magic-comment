@@ -6,3 +6,11 @@ Initial Version
 
 Existing magic comments are now erased before the file is prepended with the desired magic comment
 Bugfixes
+
+## 0.0.3 (December 12, 2014)
+
+Supporting for Multiple paths
+
+## 0.1.0 (December 12, 2014)
+
+Rename to magic_comment
