@@ -11,14 +11,14 @@ module AddMagicComment
     # defaults
     paths.push [Dir.pwd] if paths.empty?
 
-    encoding = "coding: utf-8\n"
-    default_comment = '# {encoding}'
+    encoding = "coding: utf-8"
+    default_comment = "# {encoding}\n\n"
 
     # TODO : add options for recursivity (and application of the script to a single file)
     extensions = {
       '.rb' => default_comment,
       '.rake' => default_comment,
-      '.haml' => '-# {encoding}',
+      '.haml' => "-#{default_comment}",
     }
 
     paths.each do |path|
