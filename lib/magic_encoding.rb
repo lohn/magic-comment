@@ -49,8 +49,11 @@ module AddMagicComment
       # set current encoding
       lines.unshift magic_comment
 
+      body = lines.join
+
       file.pos = 0
-      file.write lines.join
+      file.write body
+      file.truncate(body.bytesize)
       file.close
     end
 
