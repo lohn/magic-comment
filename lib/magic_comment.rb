@@ -2,7 +2,7 @@
 # A simple library to prepend magic comments for encoding to multiple ".rb" files
 require 'pathname'
 
-module AddMagicComment
+module MagicComment
 
   # Options :
   # - paths
